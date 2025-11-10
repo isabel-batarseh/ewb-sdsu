@@ -1,52 +1,28 @@
 "use client";
 
 import Image from "next/image";
-import React from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import {
   Mail,
   HeartHandshake,
-  CalendarDays,
-  MapPin,
   ArrowRight,
   HandHeart,
   ExternalLink,
+  Menu,
+  X,
 } from "lucide-react";
 
-const DONATE_URL = "https://support.ewb-usa.org/checkout/donation?eid=83710"; // EWB USA donation page
-const JOIN_FORM_URL = "https://groupme.com/join_group/109684480/Nn92mV0U"; // GroupMe join link
-
-const projects = [
-  {
-    title: "Clean Water — Valle Verde, Guatemala",
-    summary:
-      "Designing a gravity-fed water distribution system for 120 households with community-owned maintenance.",
-    impact: "120 households | 600+ residents",
-  },
-  {
-    title: "Bridge to School — La Esperanza, Nicaragua",
-    summary:
-      "Pedestrian footbridge enabling year-round school access during the rainy season.",
-    impact: "2 villages | 180 students",
-  },
-  {
-    title: "Solar Microgrid — Baja California, MX",
-    summary:
-      "Off-grid solar + battery for a rural clinic; training local technicians for upkeep.",
-    impact: "1 clinic | 1,500 patients/yr",
-  },
-];
-
-const events = [
-  { date: "Nov 5, 2025", title: "General Body Meeting", location: "SDSU Student Union 220" },
-  { date: "Nov 12, 2025", title: "SolidWorks Workshop", location: "Engineering 201" },
-  { date: "Dec 3, 2025", title: "Fundraiser Night", location: "Mission Valley" },
-];
+const DONATE_URL =
+  "https://support.ewb-usa.org/checkout/donation?eid=83710";
+const JOIN_FORM_URL = "https://groupme.com/join_group/109684480/Nn92mV0U";
 
 export default function HomePage() {
+  const [open, setOpen] = useState(false); // mobile nav
+
   return (
-    <div className="min-h-screen bg-white text-gray-900">
+    <div className="min-h-screen bg-white text-gray-900 overflow-x-hidden">
       {/* Nav */}
       <header className="sticky top-0 z-50 bg-white/90 border-b backdrop-blur supports-[backdrop-filter]:bg-white/70">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
@@ -55,26 +31,38 @@ export default function HomePage() {
             <Image
               src="/clear-small-logo_1.png"
               alt="EWB SDSU logo"
-              width={64}
-              height={64}
-              className="h-12 w-12 object-contain"
+              width={48}
+              height={48}
+              className="h-10 w-10 object-contain"
               priority
-              sizes="48px"
+              sizes="40px"
             />
-            <span className="text-lg font-semibold tracking-tight">EWB @ SDSU</span>
+            <span className="text-lg font-semibold tracking-tight">
+              EWB @ SDSU
+            </span>
           </div>
 
-          {/* Middle: Nav */}
-          <nav className="flex-1 flex justify-center items-center gap-10 text-base font-medium">
-            <a href="#projects" className="hover:text-gray-700">Projects</a>
-            <a href="#events" className="hover:text-gray-700">Events</a>
-            <a href="#team" className="hover:text-gray-700">Team</a>
-            <a href="#sponsors" className="hover:text-gray-700">Sponsors</a>
-            <a href="#contact" className="hover:text-gray-700">Contact</a>
+          {/* Desktop Nav */}
+          <nav className="hidden md:flex flex-1 justify-center items-center gap-6 text-sm font-medium">
+            <a href="#projects" className="hover:text-gray-700">
+              Projects
+            </a>
+            <a href="#events" className="hover:text-gray-700">
+              Events
+            </a>
+            <a href="#team" className="hover:text-gray-700">
+              Team
+            </a>
+            <a href="#sponsors" className="hover:text-gray-700">
+              Sponsors
+            </a>
+            <a href="#contact" className="hover:text-gray-700">
+              Contact
+            </a>
           </nav>
 
-          {/* Right: Donate */}
-          <div className="flex items-center gap-2 shrink-0">
+          {/* Right: Donate (desktop) */}
+          <div className="hidden md:flex items-center gap-2 shrink-0">
             <Button asChild className="rounded-2xl bg-blue-600 hover:bg-blue-700 text-white">
               <a href={DONATE_URL} target="_blank" rel="noreferrer">
                 <HandHeart className="mr-2 h-4 w-4" />
@@ -82,46 +70,83 @@ export default function HomePage() {
               </a>
             </Button>
           </div>
+
+          {/* Mobile: hamburger */}
+          <button
+            className="md:hidden inline-flex items-center justify-center p-2 rounded-md border"
+            aria-label="Open menu"
+            onClick={() => setOpen((s) => !s)}
+          >
+            {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </button>
         </div>
+
+        {/* Mobile menu panel */}
+        {open && (
+          <div className="md:hidden border-t bg-white">
+            <div className="mx-auto max-w-7xl px-4 py-3 space-y-2">
+              <a onClick={() => setOpen(false)} href="#projects" className="block py-2">
+                Projects
+              </a>
+              <a onClick={() => setOpen(false)} href="#events" className="block py-2">
+                Events
+              </a>
+              <a onClick={() => setOpen(false)} href="#team" className="block py-2">
+                Team
+              </a>
+              <a onClick={() => setOpen(false)} href="#sponsors" className="block py-2">
+                Sponsors
+              </a>
+              <a onClick={() => setOpen(false)} href="#contact" className="block py-2">
+                Contact
+              </a>
+              <Button asChild className="w-full rounded-xl">
+                <a href={DONATE_URL} target="_blank" rel="noreferrer">
+                  <HandHeart className="mr-2 h-4 w-4" /> Donate
+                </a>
+              </Button>
+            </div>
+          </div>
+        )}
       </header>
 
       {/* Hero Section */}
       <section className="relative overflow-hidden">
         <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-50 via-white to-white" />
         <div className="absolute -top-20 -left-20 w-[300px] h-[300px] bg-blue-100 rounded-full opacity-30 blur-3xl z-[-1]" />
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 sm:py-20">
           <div className="grid lg:grid-cols-2 gap-10 items-center">
             <div>
               <motion.h1
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
-                className="text-4xl sm:text-5xl font-sans font-bold tracking-tight text-blue-900 whitespace-nowrap"
+                className="text-3xl sm:text-5xl font-sans font-bold tracking-tight text-blue-900"
               >
                 BUILDING A BETTER WORLD.
               </motion.h1>
-              <p className="mt-4 text-lg text-gray-600 max-w-3xl">
+              <p className="mt-4 text-base sm:text-lg text-gray-600 max-w-3xl">
                 We are the San Diego State chapter of Engineers Without Borders USA. Students and professionals
                 collaborating on sustainable, community-driven projects at home and abroad.
               </p>
               <p className="text-sm text-gray-500 mt-2">
                 Please mention <strong>“SDSU Chapter”</strong> in the donation note so your gift is directed to our team.
               </p>
-              <div className="mt-6 flex flex-wrap gap-3">
+              <div className="mt-6 flex flex-col sm:flex-row flex-wrap gap-3">
                 <Button asChild className="rounded-2xl text-white">
                   <a href={DONATE_URL} target="_blank" rel="noreferrer" className="flex items-center">
                     <HeartHandshake className="mr-2 h-4 w-4 text-white" /> Donate
                   </a>
                 </Button>
-                <Button asChild variant="outline" size="lg" className="rounded-2xl">
+                <Button asChild variant="outline" className="rounded-2xl">
                   <a href={JOIN_FORM_URL} target="_blank" rel="noreferrer">
                     Join the Chapter
                     <ArrowRight className="ml-2 h-5 w-5" />
                   </a>
                 </Button>
               </div>
-              <div className="mt-10 flex justify-start">
-                <a href="#projects" className="text-blue-600 hover:underline flex items-center gap-2">
+              <div className="mt-8">
+                <a href="#projects" className="text-blue-600 hover:underline inline-flex items-center gap-2">
                   See Our Projects <ArrowRight className="h-4 w-4" />
                 </a>
               </div>
@@ -355,6 +380,7 @@ export default function HomePage() {
                   Instagram <ExternalLink className="ml-2 h-4 w-4" />
                 </a>
               </Button>
+
             </div>
           </div>
 
